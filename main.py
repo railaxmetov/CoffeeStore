@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 
 import sys
 
+from addEditCoffeeForm import addEditCoffeeItem
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -20,6 +22,9 @@ class Ui_MainWindow(object):
         self.refresh = QtWidgets.QPushButton(parent=self.centralwidget)
         self.refresh.setGeometry(QtCore.QRect(680, 510, 101, 29))
         self.refresh.setObjectName("refresh")
+        self.addCoffee = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.addCoffee.setGeometry(QtCore.QRect(570, 510, 101, 29))
+        self.addCoffee.setObjectName("addCoffee")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
@@ -36,6 +41,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.refresh.setText(_translate("MainWindow", "Обновить"))
+        self.addCoffee.setText(_translate("MainWindow", "Добавить"))
 
 
 class CoffeePrices(QMainWindow, Ui_MainWindow):
@@ -49,6 +55,7 @@ class CoffeePrices(QMainWindow, Ui_MainWindow):
         self.cur = self.con.cursor()
 
         self.refresh.clicked.connect(self.refresh_prices)
+        self.addCoffee.clicked.connect(self.add_coffee)
 
     def refresh_prices(self):
         res = self.cur.execute('SELECT * FROM CoffeePrices')
@@ -63,6 +70,11 @@ class CoffeePrices(QMainWindow, Ui_MainWindow):
                 self.coffeePrices.setItem(i, j, QTableWidgetItem(str(item)))
 
         self.coffeePrices.resizeColumnsToContents()
+
+    def add_coffee(self):
+        temp_dialog = addEditCoffeeItem(self.cur)
+        temp_dialog.exec()
+        self.con.commit()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
