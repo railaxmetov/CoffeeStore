@@ -51,7 +51,7 @@ class CoffeePrices(QMainWindow, Ui_MainWindow):
         self.initUI()
 
     def initUI(self):
-        self.con = sqlite3.connect('coffee.sqlite')
+        self.con = sqlite3.connect('release/data/coffee.sqlite')
         self.cur = self.con.cursor()
 
         self.refresh.clicked.connect(self.refresh_prices)
